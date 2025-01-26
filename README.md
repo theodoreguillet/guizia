@@ -1,59 +1,33 @@
+# Guizia
 
-![tw-banner](https://github.com/thirdweb-example/next-starter/assets/57885104/20c8ce3b-4e55-4f10-ae03-2fe4743a5ee8)
+Generate NFTs from your **X** profile in few clicks using our Guizia DefAI Agent.
 
-# thirdweb-next-starter
+## Idea
 
-Starter template to build an onchain react native app with [thirdweb](https://thirdweb.com/) and [next](https://nextjs.org/).
+With Guizia we open new social possibilities on the Sonic blockchain.
 
-## Installation
+## Requirements
 
-Install the template using [thirdweb create](https://portal.thirdweb.com/cli/create)
+You need a compatible EVM wallet. We recommend using Rabby.
 
-```bash
-  npx thirdweb create app --next
-```
+- [Rabby](hhttps://chromewebstore.google.com/detail/rabby-wallet/acmacodkjbdgmoleebolmdjonilkdbch?hl=fr&utm_source=ext_sidebar)
 
-## Environment Variables
-
-To run this project, you will need to add the following environment variables to your .env file:
-
-`CLIENT_ID`
-
-To learn how to create a client ID, refer to the [client documentation](https://portal.thirdweb.com/typescript/v5/client). 
-
-## Run locally
+## Run Locally
 
 Install dependencies
 
 ```bash
-yarn
+  # yarn
+  yarn install
 ```
 
-Start development server
+Start the server
 
 ```bash
-yarn dev
+  # yarn
+  yarn dev
 ```
 
-Create a production build
+## Environment Variables
 
-```bash
-yarn build
-```
-
-Preview the production build
-
-```bash
-yarn start
-```
-
-## Resources
-
-- [Documentation](https://portal.thirdweb.com/typescript/v5)
-- [Templates](https://thirdweb.com/templates)
-- [YouTube](https://www.youtube.com/c/thirdweb)
-- [Blog](https://blog.thirdweb.com)
-
-## Need help?
-
-For help or feedback, please [visit our support site](https://thirdweb.com/support)
+To run this project, you will need to add environment variables. Check the `.env.example` file for all the environment variables required and add it to the `.env` file or set them up on your hosting provider.
