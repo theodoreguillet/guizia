@@ -2,6 +2,12 @@
 
 This project is used as a guide to show how to deploy Guizia contracts with Hardhat & Thirdweb.
 
+Install dependencies
+
+```bash
+yarn install
+```
+
 To compile the contracts code
 
 ```bash
