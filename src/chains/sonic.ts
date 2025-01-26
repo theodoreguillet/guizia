@@ -14,5 +14,4 @@ export const sonic = /*@__PURE__*/ defineChain({
       apiUrl: 'https://api.sonicscan.org/api',
     },
   ],
-  testnet: true,
 });
