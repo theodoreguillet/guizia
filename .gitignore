@@ -36,14 +36,14 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-./contracts/node_modules
-./contracts/.env
-./contracts/overage
-./contracts/coverage.json
-./contracts/typechain
-./contracts/typechain-types
+/contracts/node_modules/
+/contracts/.env
+/contracts/overage
+/contracts/coverage.json
+/contracts/typechain
+/contracts/typechain-types
 
 #Hardhat files
-./contracts/cache
-./contracts/artifacts
+/contracts/cache/
+/contracts/artifacts/
 
