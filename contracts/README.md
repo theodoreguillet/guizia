@@ -15,6 +15,13 @@ npx hardhat clean
 npx hardhat compile
 ```
 
+To deploy and verify with hardhat
+
+```bash
+npx hardhat run scripts/deployGuizia.js --network sonicBlaze
+npx hardhat run scripts/deployGuiziaNFT.js --network sonicBlaze
+```
+
 To deploy it using thirdweb
 
 ```bash

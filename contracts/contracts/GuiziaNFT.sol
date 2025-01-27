@@ -17,10 +17,8 @@ contract GuiziaNFT is ERC721URIStorage {
     bool public mintingOpen = true; // Boolean to control minting
 
     constructor(
-        string memory _name,
-        string memory _symbol,
         address _tokenAddress // ERC-20 token contract address
-    ) ERC721(_name, _symbol) {
+    ) ERC721("Guizia", "GUIZIA") {
         owner = msg.sender;
         token = IERC20(_tokenAddress); // Initialize ERC-20 token reference
     }
