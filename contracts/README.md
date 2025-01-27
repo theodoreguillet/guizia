@@ -15,6 +15,9 @@ npx hardhat clean
 npx hardhat compile
 ```
 
+Then , you'll need to fill the .env variables;
+You can get the sonicscan api key on https://sonicscan.org/ by creating an account
+
 To deploy and verify with hardhat
 
 ```bash
