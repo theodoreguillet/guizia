@@ -16,3 +16,5 @@ export const sonicBlaze = /*@__PURE__*/ defineChain({
   ],
   testnet: true,
 });
+
+export const sonicBlazeRPC: string = 'https://rpc.blaze.soniclabs.com';

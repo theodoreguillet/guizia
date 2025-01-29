@@ -2,10 +2,7 @@
 
 import Link from 'next/link';
 import styles from './Navbar.module.css';
-import { ConnectButton } from 'thirdweb/react';
-import { client } from '@/app/client';
-import { createWallet } from 'thirdweb/wallets';
-import { sonicBlaze } from '@/chains/sonic-blaze';
+import { ThirdwebConnectButton } from '../ConnectButton/ConnectButton';
 
 /**
  * Navigation bar that shows up on all pages.
@@ -24,15 +21,7 @@ export function Navbar() {
             <Link href="/faq">How it works</Link>
           </h4>
           <h4>
-            <ConnectButton
-              client={client}
-              appMetadata={{
-                name: 'Guizia',
-                url: 'https://guizia.io',
-              }}
-              wallets={[createWallet('io.rabby'), createWallet('io.metamask')]}
-              chain={sonicBlaze}
-            />
+            <ThirdwebConnectButton />
           </h4>
         </div>
       </nav>

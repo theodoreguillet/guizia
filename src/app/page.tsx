@@ -1,18 +1,25 @@
 'use client';
 
-import { ConnectButton, useActiveWallet } from 'thirdweb/react';
-import { client } from './client';
-import { createWallet } from 'thirdweb/wallets';
-import { sonicBlaze } from '@/chains/sonic-blaze';
+import { useActiveWallet } from 'thirdweb/react';
 import { useEffect, useState } from 'react';
+import { ThirdwebConnectButton } from './components/ConnectButton/ConnectButton';
+import { Credits } from './components/Credits/Credits';
 
 export default function Home() {
   const [logged, setLogged] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const wallet = useActiveWallet();
 
+  // Ensure this runs only on the client to prevent SSR mismatches
   useEffect(() => {
-    wallet ? setLogged(true) : setLogged(false);
-  }, [wallet]); // Re-run the effect whenever the wallet address changes
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (isClient) {
+      setLogged(!!wallet);
+    }
+  }, [wallet, isClient]);
 
   return (
     <div className="py-20">
@@ -21,27 +28,25 @@ export default function Home() {
           <span className="inline-block -skew-x-6 text-blue-500"> DefAI </span>
           <span> NFT Agent</span>
         </h1>
-
-        <p className="text-zinc-300 text-base">
-          {logged ? (
-            ''
-          ) : (
-            <span>
-              Connect your <b>wallet</b> to get started.{' '}
-            </span>
-          )}
-        </p>
       </header>
       <div className="flex justify-center mb-5">
-        <ConnectButton
-          client={client}
-          appMetadata={{
-            name: 'Guizia',
-            url: 'https://guizia.io',
-          }}
-          wallets={[createWallet('io.rabby'), createWallet('io.metamask')]}
-          chain={sonicBlaze}
-        />
+        <div className="text-zinc-300 text-base">
+          {isClient ? (
+            logged ? (
+              <Credits />
+            ) : (
+              <div className="flex flex-col">
+                <p className="text-zinc-300 text-base">
+                  Connect your <b>wallet</b> to get started.
+                </p>
+                <ThirdwebConnectButton />
+              </div>
+            )
+          ) : (
+            // Placeholder to prevent hydration mismatch
+            <div className="text-zinc-300 text-base h-6 w-48 bg-zinc-800 rounded-md animate-pulse"></div>
+          )}
+        </div>
       </div>
     </div>
   );
