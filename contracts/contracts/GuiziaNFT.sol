@@ -4,12 +4,17 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
+interface IERC20Burnable is IERC20 {
+    function burn(uint256 value) external returns (bool);
+    function burnFrom(address account, uint256 value) external returns (bool);
+}
+
 contract GuiziaNFT is ERC721URIStorage {
     uint256 private _tokenIds;
 
     address public owner;
 
-    IERC20 public token; // Reference to the ERC-20 token contract
+    IERC20Burnable public token; // Reference to the ERC-20 token contract
     uint256 public creditCost = 100; // Cost in ERC-20 tokens to buy credit
 
     mapping(address => uint256) public credits; // Tracks user credits
@@ -20,16 +25,13 @@ contract GuiziaNFT is ERC721URIStorage {
         address _tokenAddress // ERC-20 token contract address
     ) ERC721("Guizia", "GUIZIA") {
         owner = msg.sender;
-        token = IERC20(_tokenAddress); // Initialize ERC-20 token reference
+        token = IERC20Burnable(_tokenAddress); // Initialize ERC-20 token reference
     }
 
     // Function to buy credit using the ERC-20 token
     function buyCredit() public {
-        // Transfer `creditCost` tokens from the caller to this contract
-        require(token.transferFrom(msg.sender, address(this), creditCost), "Token transfer failed");
-
-        // Burn the tokens by sending them to the zero address
-        require(token.transfer(address(0), creditCost), "Token burn failed");
+        // Burn `creditCost` tokens from the caller 
+        require(token.burnFrom(msg.sender, creditCost), "Token burn failed");
 
         // Increment the caller's credit balance
         credits[msg.sender] += 1;
@@ -73,7 +75,7 @@ contract GuiziaNFT is ERC721URIStorage {
     function setTokenAddress(address _newTokenAddress) public {
         require(msg.sender == owner, "Only the owner can change the token address");
         require(_newTokenAddress != address(0), "Token address cannot be the zero address");
-        token = IERC20(_newTokenAddress);
+        token = IERC20Burnable(_newTokenAddress);
     }
 
     function totalSupply() public view returns (uint256) {
