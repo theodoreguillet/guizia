@@ -13,7 +13,7 @@ export function Navbar() {
       <nav className={styles.nav}>
         <div className={styles.navLeft}>
           <Link href="/">
-            <span className="font-bold text-2xl">GUIZIA</span>
+            <span className="font-bold text-2xl">guizia</span>
           </Link>
         </div>
         <div className={styles.navRight}>
