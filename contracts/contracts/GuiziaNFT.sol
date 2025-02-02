@@ -43,7 +43,7 @@ contract GuiziaNFT is ERC721URIStorage {
     }
 
     // Mint function that requires a user to have credit
-    function mint(address userAddress, string memory tokenURI) public {
+    function mint(address userAddress, string memory tokenURI) public returns (uint256){
         require(mintingOpen, "Minting is currently disabled"); // Ensure minting is open
         require(credits[userAddress] > 0, "Insufficient credit"); // Check if the user has sufficient credit
 
@@ -56,6 +56,8 @@ contract GuiziaNFT is ERC721URIStorage {
         uint256 newItemId = _tokenIds;
         _mint(userAddress, newItemId);
         _setTokenURI(newItemId, tokenURI);
+
+        return newItemId;
     }
 
     // Function to toggle or set the minting status (only callable by the owner)

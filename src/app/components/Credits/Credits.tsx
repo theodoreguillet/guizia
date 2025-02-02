@@ -6,7 +6,12 @@ import { ethers, parseUnits } from 'ethers';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
-import { useActiveAccount } from 'thirdweb/react';
+import {
+  NFTMedia,
+  NFTName,
+  NFTProvider,
+  useActiveAccount,
+} from 'thirdweb/react';
 import { prepareContractCall, sendTransaction } from 'thirdweb/transaction';
 import { client } from '@/app/client';
 import { getContract } from 'thirdweb/contract';
@@ -28,9 +33,12 @@ const provider = new ethers.JsonRpcProvider(sonicBlazeRPC);
 export function Credits() {
   const { loading, setLoading } = useLoading();
   const [credits, setCredits] = useState(0);
+  const [displayNFT, setDisplayNFT] = useState(false);
+  const [NFTId, setNFTId] = useState(0n);
+
   const account = useActiveAccount();
 
-  const fetchContract = async () => {
+  const updateCredits = async () => {
     if (!account) return;
     setLoading(true);
     try {
@@ -50,7 +58,7 @@ export function Credits() {
   };
 
   useEffect(() => {
-    fetchContract();
+    updateCredits();
   }, [account]);
 
   const buyCredits = async () => {
@@ -94,7 +102,7 @@ export function Credits() {
       });
       if (transactionHash) {
         await waitForTransaction(transactionHash);
-        fetchContract();
+        updateCredits();
       }
     } catch (error) {
       console.error('Error buying credits:', error);
@@ -120,8 +128,29 @@ export function Credits() {
         account,
       });
       if (transactionHash) {
+        // Mint successful
         await waitForTransaction(transactionHash);
-        fetchContract();
+
+        // Update user credits
+        updateCredits();
+
+        // Fetch transaction receipt
+        const receipt = await provider.getTransactionReceipt(transactionHash);
+
+        if (receipt && receipt.logs.length > 0) {
+          // Getting the minted NFT id from the mint Event
+          const mintEvent = receipt.logs.find(
+            (log) => log.address.toLowerCase() === contractAddress.toLowerCase()
+          );
+
+          if (mintEvent) {
+            const newItemId = ethers.toBigInt(mintEvent.topics[3]);
+            // Update the minted NFT Id
+            setDisplayNFT(true);
+            setNFTId(newItemId);
+            return newItemId;
+          }
+        }
       }
     } catch (error) {
       console.error('Error minting NFT:', error);
@@ -141,8 +170,8 @@ export function Credits() {
       <div className="flex">
         <p>
           You currently have{' '}
-          <span className="underline underline-offset-2">{credits}</span>{' '}
-          credits.
+          <span className="underline underline-offset-2">{credits}</span> credit
+          {credits > 1 ? 's' : ''}.
         </p>
         <Image src="/coin.gif" width={20} height={20} alt="Coin" />
       </div>
@@ -162,6 +191,17 @@ export function Credits() {
           Mint NFT (1-credit)
         </button>
       ) : null}
+      {displayNFT ? (
+        <>
+          <p>Mint successful !</p>
+          <NFTProvider contract={contractNFT} tokenId={NFTId}>
+            <NFTMedia />
+            <NFTName />
+          </NFTProvider>
+        </>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
