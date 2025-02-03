@@ -18,6 +18,9 @@ export function Navbar() {
         </div>
         <div className={styles.navRight}>
           <h4 className={styles.hideLink}>
+            <Link href="/collection">Collection</Link>
+          </h4>
+          <h4 className={styles.hideLink}>
             <Link href="/faq">How it works</Link>
           </h4>
           <h4>

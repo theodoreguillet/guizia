@@ -18,8 +18,7 @@ const config: any = {
   },
   networks: {
     sonicBlaze: {
-      url: 'https://rpc.ankr.com/sonic_blaze_testnet',
-      chainId: 57054,
+      url: 'https://rpc.blaze.soniclabs.com',
       accounts: [process.env.ACCOUNT_PRIVATE_KEY],
     },
   },

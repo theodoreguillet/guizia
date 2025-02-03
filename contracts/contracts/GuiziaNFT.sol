@@ -21,6 +21,8 @@ contract GuiziaNFT is ERC721URIStorage {
 
     bool public mintingOpen = true; // Boolean to control minting
 
+    mapping(address => uint256[]) private _ownedTokens; // Tracks owned tokens
+
     constructor(
         address _tokenAddress // ERC-20 token contract address
     ) ERC721("Guizia", "GUIZIA") {
@@ -56,8 +58,14 @@ contract GuiziaNFT is ERC721URIStorage {
         uint256 newItemId = _tokenIds;
         _mint(userAddress, newItemId);
         _setTokenURI(newItemId, tokenURI);
+        _ownedTokens[userAddress].push(newItemId);
 
         return newItemId;
+    }
+
+    // Get all token ids of a user address
+    function tokenIdsOf(address ownerAddress) public view returns (uint256[] memory) {
+        return _ownedTokens[ownerAddress];
     }
 
     // Function to toggle or set the minting status (only callable by the owner)
