@@ -14,6 +14,7 @@ import { sonicBlaze, sonicBlazeRPC } from '@/chains/sonic-blaze';
 import { client } from '../client';
 import { useLoading } from '../components/LoadingContext/LoadingContext';
 import { ethers } from 'ethers';
+import { useRouter } from 'next/navigation';
 
 const contractAddress = process.env.NEXT_PUBLIC_NFT_CONTRACT as string;
 const contractABI = require('../../abi/guizia-nft.abi.json');
@@ -30,6 +31,7 @@ export default function Collection() {
   const { loading, setLoading } = useLoading();
   const [tokenIds, setTokenIds] = useState([]);
   const account = useActiveAccount();
+  const router = useRouter();
 
   const fetchCollection = async () => {
     if (!account) return;
@@ -41,7 +43,6 @@ export default function Collection() {
         provider
       );
       const tokenIds = await contract.tokenIdsOf(account?.address);
-      console.log('fetch Contract done ', tokenIds);
       setTokenIds(tokenIds);
     } catch (error) {
       console.error('Error fetching contract data:', error);
@@ -51,25 +52,32 @@ export default function Collection() {
   };
 
   useEffect(() => {
+    if (!account) {
+      router.push('/');
+      return;
+    }
     fetchCollection();
   }, [account]);
 
   return (
     <div className={styles.collectionContainer}>
       <p className="font-bold text-5xl mb-10">Collection</p>
-      <p className="text-neutral-50 mb-3">
+      <p className="text-neutral-50 mb-10">
         {`Below are all your owned Guizia NFTs.`}
       </p>
       {tokenIds && tokenIds.length ? (
-        <div className="grid grid-flow-col grid-rows-4 gap-4">
-          {tokenIds.map((tokenId, i) => {
-            return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {tokenIds.map((tokenId, i) => (
+            <div
+              key={i}
+              className="flex flex-col items-center p-4 border rounded-lg shadow-lg bg-gray-900"
+            >
               <NFTProvider contract={contractNFT} tokenId={tokenId}>
-                <NFTMedia />
-                <NFTName />
+                <NFTMedia className="w-full h-48 object-cover rounded-md" />
+                <NFTName className="mt-2 text-center text-white font-semibold" />
               </NFTProvider>
-            );
-          })}
+            </div>
+          ))}
         </div>
       ) : (
         <p>You don't own any Guizia.</p>
