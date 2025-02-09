@@ -16,6 +16,7 @@ import { prepareContractCall, sendTransaction } from 'thirdweb/transaction';
 import { client } from '@/app/client';
 import { getContract } from 'thirdweb/contract';
 import { useLoading } from '../LoadingContext/LoadingContext';
+import { generateGuiziaMetadata } from '@/utils/ipfs';
 
 const tokenAddress = process.env.NEXT_PUBLIC_TOKEN_CONTRACT as string;
 const tokenABI = require('../../../abi/guizia.abi.json');
@@ -115,13 +116,12 @@ export function Credits() {
     if (!account) return;
     setLoading(true);
     try {
+      const ipfsMetadata = await generateGuiziaMetadata();
+
       const transaction = prepareContractCall({
         contract: contractNFT,
         method: 'function mint(address userAddress, string memory tokenURI)',
-        params: [
-          account.address,
-          'ipfs://bafybeifdfqw4azq6ghgs5hp6yqdxk5mjoamvru7ro7pogx7cpddnrzx5qm/835',
-        ],
+        params: [account.address, ipfsMetadata],
       });
       const { transactionHash } = await sendTransaction({
         transaction,
