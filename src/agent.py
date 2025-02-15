@@ -120,7 +120,7 @@ class ZerePyAgent:
         # Reduce tweet frequency during night hours (1 AM - 5 AM)
         if 1 <= current_hour <= 5:
             weights = [
-                weight * self.time_based_multipliers.get("tweet_night_multiplier", 0.4) if task["name"] == "post-tweet"
+                weight * self.time_based_multipliers.get("tweet_night_multiplier", 0.4) if task["name"] in ("post-tweet", "post-tweet-picture")
                 else weight
                 for weight, task in zip(weights, self.tasks)
             ]
@@ -144,6 +144,24 @@ class ZerePyAgent:
             action_name="generate-text",
             params=[prompt, system_prompt]
         )
+    
+    def generate_picture(self) -> str:
+        """Generate picture"""
+        mockData = {
+            "output": 'https://shorturl.at/L3FYS',
+            "image_prompt":
+                'A cute anthropomorphic raccoon standing confidently, facing to the right, in a clean and modern cartoon style with bold outlines. The character has a simple background with a chaotic swirl of neon colors. Its skin is a glitchy digital pattern, giving it a unique and distinct appearance. On its head, it features a jester hat with clashing colors, adding personality to the design. The facial expression is a mischievous grin, reflecting its mood and attitude. Additionally, the raccoon may have an optional accessory: sunglasses with pixelated lenses. The overall aesthetic is minimalistic yet stylish, making it ideal for an NFT collection.',
+            "features": {
+                "background": 'a chaotic swirl of neon colors',
+                "skin": 'a glitchy digital pattern',
+                "head": 'a jester hat with clashing colors',
+                "face": 'a mischievous grin',
+                "accessory": 'sunglasses with pixelated lenses',
+            },
+            "personality": 'Sh*tposter',
+        }
+
+        return mockData["output"]
 
     def perform_action(self, connection: str, action: str, **kwargs) -> None:
         return self.connection_manager.perform_action(connection, action, **kwargs)
@@ -178,14 +196,14 @@ class ZerePyAgent:
                 try:
                     # REPLENISH INPUTS
                     # TODO: Add more inputs to complexify agent behavior
-                    if "timeline_tweets" not in self.state or self.state["timeline_tweets"] is None or len(self.state["timeline_tweets"]) == 0:
-                        if any("tweet" in task["name"] for task in self.tasks):
-                            logger.info("\n👀 READING TIMELINE")
-                            self.state["timeline_tweets"] = self.connection_manager.perform_action(
-                                connection_name="twitter",
-                                action_name="read-timeline",
-                                params=[]
-                            )
+                    # if "timeline_tweets" not in self.state or self.state["timeline_tweets"] is None or len(self.state["timeline_tweets"]) == 0:
+                    #     if any("tweet" in task["name"] for task in self.tasks):
+                    #         logger.info("\n👀 READING TIMELINE")
+                    #         self.state["timeline_tweets"] = self.connection_manager.perform_action(
+                    #             connection_name="twitter",
+                    #             action_name="read-timeline",
+                    #             params=[]
+                    #         )
 
                     if "room_info" not in self.state or self.state["room_info"] is None:
                         if any("echochambers" in task["name"] for task in self.tasks):

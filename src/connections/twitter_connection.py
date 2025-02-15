@@ -1,6 +1,7 @@
 import os
 import logging
 from typing import Dict, Any, List, Tuple
+import requests
 from requests_oauthlib import OAuth1Session
 from dotenv import set_key, load_dotenv
 from src.connections.base_connection import BaseConnection, Action, ActionParameter
@@ -62,6 +63,14 @@ class TwitterConnection(BaseConnection):
                     ActionParameter("message", True, str, "Text content of the tweet")
                 ],
                 description="Post a new tweet"
+            ),
+            "post-tweet-picture": Action(
+                name="post-tweet-picture",
+                parameters=[
+                    ActionParameter("message", True, str, "Text content of the tweet"),
+                    ActionParameter("picture_link", True, str, "Link of the picture")
+                ],
+                description="Post a new tweet with a generated picture from the Guizia AI Agent"
             ),
             "read-timeline": Action(
                 name="read-timeline",
@@ -441,6 +450,60 @@ class TwitterConnection(BaseConnection):
 
         logger.info("Tweet posted successfully")
         return response
+    
+    def post_tweet_picture(self, message: str, picture_link: str, **kwargs) -> dict:
+        """Post a new tweet with a picture"""
+        logger.debug("Posting new picture tweet")
+
+        # Validate the tweet text
+        self._validate_tweet_text(message)
+
+        # Upload the picture to twitter and get the media ID
+        media_upload_response = self._upload_media(picture_link)
+        media_id = media_upload_response.get('id')
+
+        if not media_id:
+            logger.error("Failed to upload media")
+            return {"error": "Failed to upload media"}
+
+        # Post the tweet with the media ID
+        response = self._make_request(
+            'post',
+            'tweets',
+            json={'text': message, 'media': {'media_ids': [media_id]}}
+        )
+
+        logger.info("Tweet with picture posted successfully")
+        return response
+
+    def _upload_media(self, picture_link: str) -> dict:
+        """Upload media to Twitter and return the media ID"""
+        logger.debug("Uploading media")
+
+        # Download the picture from the URL
+        picture_data = self._download_picture(picture_link)
+        
+        # Upload the picture data to Twitter
+        upload_response = self._make_request(
+            'post',
+            'media/upload',
+            files={'media': picture_data}
+        )
+
+        return upload_response
+
+    def _download_picture(self, picture_link: str) -> bytes:
+        """Download the picture from the URL and return the binary data"""
+        logger.debug(f"Downloading picture from {picture_link}")
+
+        # Get the picture from the picture link
+        response = requests.get(picture_link)
+        if response.status_code == 200:
+            return response.content
+        else:
+            logger.error("Failed to download picture")
+            return b''
+
 
     def reply_to_tweet(self, tweet_id: str, message: str, **kwargs) -> dict:
         """Reply to an existing tweet"""
