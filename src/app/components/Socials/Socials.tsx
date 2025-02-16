@@ -19,8 +19,8 @@ export function Socials() {
         >
           X
         </Link>
-        <Link href="/console" className={styles.socialsButton}>
-          Console
+        <Link href="/terminal" className={styles.socialsButton}>
+          Terminal
         </Link>
       </div>
     </div>
