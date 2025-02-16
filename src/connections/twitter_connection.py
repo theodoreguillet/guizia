@@ -1,3 +1,4 @@
+import datetime
 import os
 import logging
 from typing import Dict, Any, List, Tuple
@@ -448,6 +449,8 @@ class TwitterConnection(BaseConnection):
 
         response = self._make_request('post', 'tweets', json={'text': message})
 
+        self._post_tweet_guizia(response, "post_tweet")
+
         logger.info("Tweet posted successfully")
         return response
     
@@ -473,8 +476,25 @@ class TwitterConnection(BaseConnection):
             json={'text': message, 'media': {'media_ids': [media_id]}}
         )
 
+        self._post_tweet_guizia(response, "post_tweet")
+
         logger.info("Tweet with picture posted successfully")
         return response
+    
+    def _post_tweet_guizia(self, tweet: dict, action: str) -> dict:
+        # Add the action to the tweet 
+        tweet_with_action = tweet.copy()
+        tweet_with_action['action'] = action
+        tweet_with_action['created_at'] = datetime.today().isoformat()
+
+        response = requests.post('http://localhost:3000/api/tweets', json=tweet_with_action)
+
+        if response.status_code == 200:
+            print('Tweet sent successfully to Guizia web app!')
+            return response.json()  
+        else:
+            print('Failed to send tweet:', response.json())
+            return response.json() 
 
     def _upload_media(self, picture_link: str) -> dict:
         """Upload media to Twitter and return the media ID"""
@@ -519,6 +539,8 @@ class TwitterConnection(BaseConnection):
                                           }
                                       })
 
+        self._post_tweet_guizia(response, "reply_to_tweet")
+
         logger.info("Reply posted successfully")
         return response
 
@@ -531,6 +553,8 @@ class TwitterConnection(BaseConnection):
             'post',
             f"users/{credentials['TWITTER_USER_ID']}/likes",
             json={'tweet_id': tweet_id})
+        
+        self._post_tweet_guizia(response, "like_tweet")
 
         logger.info("Tweet liked successfully")
         return response

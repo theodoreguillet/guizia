@@ -148,7 +148,7 @@ class ZerePyAgent:
     def generate_picture(self) -> str:
         """Generate picture"""
         mockData = {
-            "output": 'https://shorturl.at/L3FYS',
+            "output": 'https://media.discordapp.net/attachments/634806273610743846/1340349800289144975/vb1.webp?ex=67b2b246&is=67b160c6&hm=149c91639ee918ffdba9cfd226d5f003eb8fec348f3ba875b52570eb18b8d605&=&format=webp&width=577&height=577',
             "image_prompt":
                 'A cute anthropomorphic raccoon standing confidently, facing to the right, in a clean and modern cartoon style with bold outlines. The character has a simple background with a chaotic swirl of neon colors. Its skin is a glitchy digital pattern, giving it a unique and distinct appearance. On its head, it features a jester hat with clashing colors, adding personality to the design. The facial expression is a mischievous grin, reflecting its mood and attitude. Additionally, the raccoon may have an optional accessory: sunglasses with pixelated lenses. The overall aesthetic is minimalistic yet stylish, making it ideal for an NFT collection.',
             "features": {
