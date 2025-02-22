@@ -41,7 +41,9 @@ contract GuiziaNFT is ERC721URIStorage {
 
     // Function to buy credit using the Guizia ERC-20 token
     function buyCredit(uint256 amount) public {
-        require(amount > 0, "Credit amount must be greater than zero"); // Ensure minting is open
+        require(amount > 0, "Credit amount must be greater than zero"); // Ensure credit amount is positive
+        require(token.balanceOf(msg.sender) >= creditCost * amount, "Insufficient token balance");
+        require(token.allowance(msg.sender, address(this)) >= creditCost * amount, "Insufficient token allowance");
         // Burn `creditCost` tokens from the caller 
         token.burnFrom(msg.sender, creditCost*amount);
 

@@ -71,12 +71,16 @@ export function Credits() {
         tokenABI.abi,
         provider
       );
-      const creditCost = parseUnits('100', 18);
+      const creditCost = parseUnits('55555', 18);
+      const amount = BigInt(1);
+
       let allowance = await tokenContract.allowance(
         account?.address,
         contractAddress
       );
-      if (BigInt(allowance) < BigInt(creditCost)) {
+
+      if (BigInt(allowance) < BigInt(creditCost) * BigInt(amount)) {
+        console.log('Approving token spend...');
         const approveTx = prepareContractCall({
           contract: getContract({
             address: tokenAddress,
@@ -84,21 +88,32 @@ export function Credits() {
             client,
           }),
           method: 'function approve(address spender, uint256 amount)',
-          params: [contractAddress, creditCost],
+          params: [contractAddress, creditCost * amount],
         });
         const { transactionHash: approveHash } = await sendTransaction({
           transaction: approveTx,
           account,
         });
         await waitForTransaction(approveHash);
+
+        // Check allowance again after approval
+        allowance = await tokenContract.allowance(
+          account?.address,
+          contractAddress
+        );
+
+        if (BigInt(allowance) < BigInt(creditCost) * BigInt(amount)) {
+          throw new Error('Insufficient token allowance after approval');
+        }
       }
+
       const transaction = prepareContractCall({
         contract: contractNFT,
         method: 'function buyCredit(uint256 amount)',
-        params: [BigInt(1)],
+        params: [amount],
       });
       const { transactionHash } = await sendTransaction({
-        transaction,
+        transaction: transaction,
         account,
       });
       if (transactionHash) {
