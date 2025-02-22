@@ -1,12 +1,21 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.20;
 
+//  ░▒▓██████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░▒▓████████▓▒░▒▓█▓▒░░▒▓██████▓▒░  
+// ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ 
+// ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░    ░▒▓██▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ 
+// ░▒▓█▓▒▒▓███▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░  ░▒▓██▓▒░  ░▒▓█▓▒░▒▓████████▓▒░ 
+// ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓██▓▒░    ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ 
+// ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ 
+//  ░▒▓██████▓▒░ ░▒▓██████▓▒░░▒▓█▓▒░▒▓████████▓▒░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░
+// Made with ♥︎ by the Guizia Team 
+
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 interface IERC20Burnable is IERC20 {
-    function burn(uint256 value) external returns (bool);
-    function burnFrom(address account, uint256 value) external returns (bool);
+    function burn(uint256 value) external;
+    function burnFrom(address account, uint256 value) external;
 }
 
 contract GuiziaNFT is ERC721URIStorage {
@@ -15,7 +24,7 @@ contract GuiziaNFT is ERC721URIStorage {
     address public owner;
 
     IERC20Burnable public token; // Reference to the ERC-20 token contract
-    uint256 public creditCost = 100; // Cost in ERC-20 tokens to buy credit
+    uint256 public creditCost = 55555; // Cost in ERC-20 tokens to buy credit
 
     mapping(address => uint256) public credits; // Tracks user credits
 
@@ -30,13 +39,14 @@ contract GuiziaNFT is ERC721URIStorage {
         token = IERC20Burnable(_tokenAddress); // Initialize ERC-20 token reference
     }
 
-    // Function to buy credit using the ERC-20 token
-    function buyCredit() public {
+    // Function to buy credit using the Guizia ERC-20 token
+    function buyCredit(uint256 amount) public {
+        require(amount > 0, "Credit amount must be greater than zero"); // Ensure minting is open
         // Burn `creditCost` tokens from the caller 
-        require(token.burnFrom(msg.sender, creditCost), "Token burn failed");
+        token.burnFrom(msg.sender, creditCost*amount);
 
         // Increment the caller's credit balance
-        credits[msg.sender] += 1;
+        credits[msg.sender] += amount;
     }
 
     // Function to check the credit balance of a user

@@ -21,7 +21,6 @@ You can get the sonicscan api key on https://sonicscan.org/ by creating an accou
 To deploy and verify with hardhat
 
 ```bash
-npx hardhat run scripts/deployGuizia.js --network sonicBlaze
 npx hardhat run scripts/deployGuiziaNFT.js --network sonicBlaze
 ```
 

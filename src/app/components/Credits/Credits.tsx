@@ -94,8 +94,8 @@ export function Credits() {
       }
       const transaction = prepareContractCall({
         contract: contractNFT,
-        method: 'function buyCredit()',
-        params: [],
+        method: 'function buyCredit(uint256 amount)',
+        params: [BigInt(1)],
       });
       const { transactionHash } = await sendTransaction({
         transaction,
