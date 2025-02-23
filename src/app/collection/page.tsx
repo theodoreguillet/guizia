@@ -1,7 +1,7 @@
 'use client';
 
 // pages/collection
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import styles from './Collection.module.css';
 import {
   NFTMedia,
@@ -33,7 +33,7 @@ export default function Collection() {
   const account = useActiveAccount();
   const router = useRouter();
 
-  const fetchCollection = async () => {
+  const fetchCollection = useCallback(async () => {
     if (!account) return;
     setLoading(true);
     try {
@@ -49,7 +49,7 @@ export default function Collection() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [account]);
 
   useEffect(() => {
     if (!account) {
@@ -57,7 +57,7 @@ export default function Collection() {
       return;
     }
     fetchCollection();
-  }, [account]);
+  }, [account, fetchCollection, router]);
 
   return (
     <div className={styles.collectionContainer}>
@@ -80,7 +80,7 @@ export default function Collection() {
           ))}
         </div>
       ) : (
-        <p>You don't own any Guizia.</p>
+        <p>You don&apos;t own any Guizia.</p>
       )}
     </div>
   );

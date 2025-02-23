@@ -18,14 +18,22 @@ export default function Terminal() {
     // Fetch tweets
     async function fetchTweets() {
       setLoading(true);
-      const response = await fetch('/api/tweets');
-      const data = await response.json();
-      setLoading(false);
-      setTweets(data);
+      try {
+        const response = await fetch('/api/tweets');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setTweets(data);
+      } catch (error) {
+        console.error('Failed to fetch tweets:', error);
+      } finally {
+        setLoading(false);
+      }
     }
 
     fetchTweets();
-  }, []);
+  }, []); // Include setLoading in the dependency array
 
   return (
     <>
