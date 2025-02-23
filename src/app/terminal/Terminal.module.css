@@ -1,0 +1,22 @@
+/* Terminal.module.css */
+.terminalContainer {
+  background-color: #000;
+  color: #00ff00;
+  font-family: 'Courier New', Courier, monospace;
+  padding: 20px;
+  border: 1px solid #f8f8f8;
+  margin-top: 18vh;
+}
+
+.tweets {
+  margin-top: 20px;
+}
+
+.tweet {
+  margin-bottom: 15px;
+}
+
+.timestamp {
+  font-size: 0.9em;
+  color: #f8f8f8;
+}
