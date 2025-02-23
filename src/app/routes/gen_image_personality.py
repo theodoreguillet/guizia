@@ -16,15 +16,14 @@ request_args_schema = {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "properties": {
-        "twitter_user_id": {"type": "string"},
+        "twitter_username": {"type": "string"},
     },
-    "required": ["twitter_user_id"],
     "additionalProperties": False,
 }
 
 
 class RequestArgs(TypedDict):
-    twitter_user_id: str
+    twitter_username: str
 
 
 openai = OpenAI(
@@ -32,7 +31,7 @@ openai = OpenAI(
 )
 
 
-async def fetch_last_tweet(user_id: str):
+async def fetch_last_tweet(user_name: str):
     """Récupère le dernier tweet d'un utilisateur"""
     twikit = TwikitClient()
 
@@ -43,7 +42,8 @@ async def fetch_last_tweet(user_id: str):
         cookies_file="twitter_cookies.json",
     )
 
-    tweets = await twikit.get_user_tweets(user_id, "Tweets", count=40)
+    twitter_user = await twikit.get_user_by_screen_name(user_name)
+    tweets = await twitter_user.get_tweets("Tweets", count=40)
 
     last_tweets_text = [tweet.text for tweet in tweets]
 
@@ -223,16 +223,23 @@ def get_random_personality(personality_key: str):
 async def process_gen_image_personality(args: RequestArgs):
     print("Starting image generation process...")
 
-    twitter_user_id = args["twitter_user_id"]
-    print(f"Received twitter user id: {twitter_user_id}")
+    twitter_username = args["twitter_username"]
+    print(f"Received twitter username: {twitter_username}")
 
-    # Fetching last tweet
-    print("Fetching last tweet...")
-    last_tweet_data = await fetch_last_tweet(twitter_user_id)
+    if twitter_username is not None and len(twitter_username) > 0:
+        # Fetching last tweet
+        print("Fetching last tweet...")
+        last_tweet_data = await fetch_last_tweet(twitter_username)
 
-    # Get personality from last tweets
-    print("Getting personality from last tweets...")
-    personality_key = await get_personality_from_tweets(last_tweet_data)
+        # Get personality from last tweets
+        print("Getting personality from last tweets...")
+        personality_key = await get_personality_from_tweets(last_tweet_data)
+    else:
+        # Random personality selection
+        print("Selecting random personality...")
+        personality_key = random.choice(list(PERSONALITIES_DATA.keys()))
+
+    print(f"Personality selected: {personality_key}")
 
     # Trait Selection
     print("Selecting random traits...")
