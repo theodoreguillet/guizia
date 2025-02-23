@@ -223,7 +223,7 @@ def get_random_personality(personality_key: str):
 async def process_gen_image_personality(args: RequestArgs):
     print("Starting image generation process...")
 
-    twitter_username = args["twitter_username"]
+    twitter_username = args.get("twitter_username")
     print(f"Received twitter username: {twitter_username}")
 
     if twitter_username is not None and len(twitter_username) > 0:
