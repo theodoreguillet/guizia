@@ -147,6 +147,3 @@ This structured pipeline allows for personalized, rare, and high-quality NFT ima
 ### Model fine tuning process
 ![Image Generation Process](2nd_step_model_fine_tuning_process.png)
 
-## License
-
-This project is licensed under the MIT License.
