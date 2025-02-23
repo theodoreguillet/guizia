@@ -1,13 +1,13 @@
-# Guiziai Generator Service
+# Guizia Generator Service
 
 ## Project Description
 
-Guiziai Generator Service is a web service that generates personalized raccoon images based on a user's Twitter profile. This service leverages GPT-4 for text processing, stable diffusion and FLUX for image generation.
+Guizia Generator Service is a web service that generates personalized raccoon images based on a user's Twitter profile. This service leverages GPT-4 for text processing, stable diffusion and FLUX for image generation.
 
 ## Project Structure
 
 ```
-guiziai-generator-service/
+guizia-generator-service/
 ├── .dockerignore
 ├── .env.exemple
 ├── .gitignore
@@ -48,8 +48,8 @@ guiziai-generator-service/
 ### Clone the Repository
 
 ```sh
-git clone https://github.com/yourusername/guiziai-generator-service.git
-cd guiziai-generator-service
+git clone https://github.com/yourusername/guizia-generator-service.git
+cd guizia-generator-service
 ```
 
 ### Install Python Dependencies
