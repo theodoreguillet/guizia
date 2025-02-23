@@ -36,6 +36,7 @@ export function Credits() {
   const [credits, setCredits] = useState(0);
   const [displayNFT, setDisplayNFT] = useState(false);
   const [NFTId, setNFTId] = useState(0n);
+  const [twitter, setTwitter] = useState('');
 
   const account = useActiveAccount();
 
@@ -131,7 +132,7 @@ export function Credits() {
     if (!account) return;
     setLoading(true);
     try {
-      const ipfsMetadata = await generateGuiziaMetadata();
+      const ipfsMetadata = await generateGuiziaMetadata(twitter);
 
       const transaction = prepareContractCall({
         contract: contractNFT,
@@ -174,6 +175,14 @@ export function Credits() {
     }
   };
 
+  const setTwitterUsername = (input: string) => {
+    const regex = /(?:@|https:\/\/x\.com\/)?([a-zA-Z0-9_]+)/;
+    const match = input.match(regex);
+    const username = match ? match[1] : '';
+
+    setTwitter(username);
+  };
+
   const waitForTransaction = async (txHash: string) => {
     console.debug(`Waiting for transaction ${txHash} to be confirmed...`);
     return new Promise((resolve) => setTimeout(resolve, 2000));
@@ -198,13 +207,28 @@ export function Credits() {
         Buy credits
       </button>
       {credits > 0 ? (
-        <button
-          className={styles.creditsButton}
-          onClick={mintNFT}
-          disabled={loading}
-        >
-          Mint NFT (1-credit)
-        </button>
+        <div className="flex flex-col items-center gap-3">
+          <div>
+            <span>Twitter username:</span>
+            <input
+              id="first_name"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="GuiziaAI"
+              value={twitter}
+              onChange={(e) => setTwitterUsername(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <button
+              className={styles.creditsButton}
+              onClick={mintNFT}
+              disabled={loading}
+            >
+              Mint NFT (1-credit)
+            </button>
+            (mint usually takes 〜45sec)
+          </div>
+        </div>
       ) : null}
       {displayNFT ? (
         <>

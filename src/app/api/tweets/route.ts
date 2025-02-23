@@ -21,14 +21,7 @@ interface Tweet {
 }
 
 // In-memory store for tweets (to replace with database)
-const tweets: Tweet[] = [
-  {
-    id: '1',
-    text: "> Look at these raccoons strutting their stuff. They know they're gorgeous. And yes, I made them that way. You're welcome.",
-    created_at: '2011-10-10T14:48:00',
-    action: TweetAction.POST_TWEET,
-  },
-];
+const tweets: Tweet[] = [];
 
 // Handle GET requests to serve posts to the terminal
 export async function GET(req: NextRequest) {

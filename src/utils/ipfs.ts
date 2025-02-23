@@ -53,8 +53,13 @@ async function uploadToIPFS(fileBuffer: Buffer): Promise<string> {
   return `ipfs://${response.IpfsHash}`;
 }
 
-export async function generateGuiziaMetadata() {
-  const imageData = await generateMetadata();
+export async function generateGuiziaMetadata(twitter: string) {
+  interface Attribute {
+    value: string;
+    trait_type: string;
+  }
+
+  const imageData = await generateMetadata(twitter);
   const imageUrl = imageData.output;
 
   const response = await fetch(imageUrl);
@@ -63,11 +68,18 @@ export async function generateGuiziaMetadata() {
   const imageIpfsPath = await uploadToIPFS(Buffer.from(imageBuffer));
 
   const metadata = {
-    attributes: [{ value: 'ColorBlue', trait_type: 'Background' }],
-    description: 'Guizia NFT Description.',
+    attributes: [] as any,
+    description: imageData?.personality?.description,
     image: imageIpfsPath,
-    name: 'Guizia NFT Name',
+    name:
+      imageData?.personality?.primary +
+      ' - ' +
+      imageData?.personality?.secondary,
   };
+
+  for (const [traitType, value] of Object.entries(imageData.traits)) {
+    metadata.attributes.push({ value: value, trait_type: traitType });
+  }
 
   if (!PINATA_API_KEY || !PINATA_SECRET_API_KEY) {
     throw new Error('Missing Pinata API keys in environment variables.');

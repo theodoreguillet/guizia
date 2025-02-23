@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { ThirdwebConnectButton } from './components/ConnectButton/ConnectButton';
 import { Credits } from './components/Credits/Credits';
 import styles from './Page.module.css';
+import Link from 'next/link';
 
 export default function Home() {
   const [logged, setLogged] = useState(false);
@@ -30,7 +31,9 @@ export default function Home() {
           <span className="inline-block -skew-x-6 text-blue-500"> DefAI </span>
           <span> NFT Agent</span>
         </h1>
-        <span className={styles.contractAddress}>{tokenContract}</span>
+        <Link href={`https://s.fun/token/${tokenContract}`} target="_blank">
+          <span className={styles.contractAddress}>{tokenContract}</span>
+        </Link>
       </header>
       <div className="flex justify-center mb-5">
         <div className="text-zinc-300 text-base">
