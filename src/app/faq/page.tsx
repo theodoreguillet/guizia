@@ -20,7 +20,7 @@ export default function FAQ() {
       />
       <FAQCard
         title="How to mint an NFT using Guizia ?"
-        description="To mint a Guizia NFT, you need to buy credits using $GUIZIA token. Each credit costs 55555 $GUIZIA. One credit gives access to one mint. The first transaction when buying credits is to give allowance of spending 55555 tokens to the Guizia NFT contract. If you already gave allowance, there is a single transaction to buy credits. After minting, you can see your Guizia NFTs on the Collection page."
+        description="To mint a Guizia NFT, you need to buy credits using $GUIZIA token. Each credit costs 55555 $GUIZIA. One credit gives access to one mint. The first transaction when buying credits is to give allowance of spending 55555 tokens to the Guizia NFT contract. If you already gave allowance, there is a single transaction to buy credits. The mint process usually takes around 45 seconds. After minting, you can see your Guizia NFTs on the Collection page."
       />
       <FAQCard
         title="What wallet should I use?"
