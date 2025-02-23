@@ -1,0 +1,42 @@
+[tool.poetry]
+package-mode = false
+name = "guizai-generator-service"
+version = "0.1.0"
+description = ""
+authors = ["Théodore Guillet"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+openai = "^1.50.2"
+requests = "^2.32.3"
+jsonschema = "^4.23.0"
+numpy = "^2.1.1"
+gunicorn = "^23.0.0"
+twikit = "^2.3.3"
+flask = {extras = ["async"], version = "^3.1.0"}
+
+[tool.poetry.group.dev.dependencies]
+pylint = "^3.3.1"
+mypy = "^1.11.2"
+rope = "^1.13.0"
+taskipy = "^1.13.0"
+black = "^24.8.0"
+types-jsonschema = "^4.23.0.20240813"
+types-requests = "^2.32.0.20241016"
+
+[[tool.mypy.overrides]]
+module = ["twikit.*"]
+ignore_missing_imports = true
+
+[tool.taskipy.tasks]
+test = "python -m unittest tests/test_*.py"
+post_test = "task lint"
+
+lint = "task lint_pylint && task lint_mypy"
+lint_pylint = "pylint tests src"
+lint_mypy = "mypy tests src"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

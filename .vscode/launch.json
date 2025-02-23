@@ -1,0 +1,12 @@
+{
+  "configurations": [
+    {
+      "name": "Débogueur Python : Démarrer l'application",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/index.py",
+      "console": "integratedTerminal",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
