@@ -31,11 +31,11 @@ openai = OpenAI(
     api_key=os.environ.get("OPENAI_API_KEY"),
 )
 
-twikit = TwikitClient()
-
 
 async def fetch_last_tweet(user_id: str):
     """Récupère le dernier tweet d'un utilisateur"""
+    twikit = TwikitClient()
+
     await twikit.login(
         auth_info_1=os.environ.get("TWITTER_USERNAME"),
         auth_info_2=os.environ.get("TWITTER_EMAIL"),
@@ -71,6 +71,7 @@ async def get_personality_from_tweets(tweets: list[str]):
         "The personnality is one of the following: "
         f"{json.dumps(personalities_types, indent=2)}"
         "You must output only the code of the personality type that best fits the tweets."
+        f"Output only: {" or ".join(PERSONALITIES_DATA.keys())}"
     )
 
     prompt = (
