@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Guizia - DefAI NFT Agent',
-  description: 'Discover and mint NFTs on Sonic blockchain.',
+  description: 'Discover and mint AI-generated NFTs on Sonic blockchain.',
 };
 
 export default function RootLayout({
