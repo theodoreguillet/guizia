@@ -1,1 +1,1 @@
-docker build -t guiziai_generator_service . && docker run -p 7777:80 --env-file .env guiziai_generator_service
+docker build -t guiziai_generator_service . && docker run -it -d -p 7777:80 --env-file .env guiziai_generator_service
