@@ -4,6 +4,7 @@ import time
 import logging
 import os
 from pathlib import Path
+from urllib import request
 from dotenv import load_dotenv
 from src.connection_manager import ConnectionManager
 from src.helpers import print_h_bar
@@ -147,21 +148,20 @@ class ZerePyAgent:
     
     def generate_picture(self) -> str:
         """Generate picture"""
-        mockData = {
-            "output": 'https://media.discordapp.net/attachments/634806273610743846/1340349800289144975/vb1.webp?ex=67b2b246&is=67b160c6&hm=149c91639ee918ffdba9cfd226d5f003eb8fec348f3ba875b52570eb18b8d605&=&format=webp&width=577&height=577',
-            "image_prompt":
-                'A cute anthropomorphic raccoon standing confidently, facing to the right, in a clean and modern cartoon style with bold outlines. The character has a simple background with a chaotic swirl of neon colors. Its skin is a glitchy digital pattern, giving it a unique and distinct appearance. On its head, it features a jester hat with clashing colors, adding personality to the design. The facial expression is a mischievous grin, reflecting its mood and attitude. Additionally, the raccoon may have an optional accessory: sunglasses with pixelated lenses. The overall aesthetic is minimalistic yet stylish, making it ideal for an NFT collection.',
-            "features": {
-                "background": 'a chaotic swirl of neon colors',
-                "skin": 'a glitchy digital pattern',
-                "head": 'a jester hat with clashing colors',
-                "face": 'a mischievous grin',
-                "accessory": 'sunglasses with pixelated lenses',
-            },
-            "personality": 'Sh*tposter',
+
+        url = "http://54.36.188.91:7777/gen-image-personality"
+        headers = {
+            "Authorization": f"Bearer {os.getenv('IMAGE_GENERATOR_API_KEY')}"
         }
 
-        return mockData["output"]
+        # Send the POST request to the API
+        response = request.get(url, headers=headers)
+
+        # Check if the request was successful
+        if response.status_code == 200:
+            return response.json().get("output")
+        else:
+            raise Exception(f"Failed to generate picture: {response.status_code} - {response.text}")
 
     def perform_action(self, connection: str, action: str, **kwargs) -> None:
         return self.connection_manager.perform_action(connection, action, **kwargs)
