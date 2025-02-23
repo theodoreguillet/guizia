@@ -487,7 +487,7 @@ class TwitterConnection(BaseConnection):
         tweet_with_action['action'] = action
         tweet_with_action['created_at'] = datetime.today().isoformat()
 
-        response = requests.post('http://localhost:3000/api/tweets', json=tweet_with_action)
+        response = requests.post(f"{os.getenv('TERMINAL_API_URL')}/api/tweets", json=tweet_with_action)
 
         if response.status_code == 200:
             print('Tweet sent successfully to Guizia web app!')
