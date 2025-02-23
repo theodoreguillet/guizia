@@ -1,1 +1,1 @@
-docker build -t warmer_qi_server . && docker run -p 7777:80 --env-file .env warmer_qi_server
+docker build -t guiziai_generator_service . && docker run -p 7777:80 --env-file .env guiziai_generator_service
