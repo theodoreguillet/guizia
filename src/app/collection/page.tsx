@@ -10,7 +10,7 @@ import {
   useActiveAccount,
 } from 'thirdweb/react';
 import { getContract } from 'thirdweb';
-import { sonicBlaze, sonicBlazeRPC } from '@/chains/sonic-blaze';
+import { sonic, sonicRPC } from '@/chains/sonic';
 import { client } from '../client';
 import { useLoading } from '../components/LoadingContext/LoadingContext';
 import { ethers } from 'ethers';
@@ -19,11 +19,11 @@ import { useRouter } from 'next/navigation';
 const contractAddress = process.env.NEXT_PUBLIC_NFT_CONTRACT as string;
 const contractABI = require('../../abi/guizia-nft.abi.json');
 
-const provider = new ethers.JsonRpcProvider(sonicBlazeRPC);
+const provider = new ethers.JsonRpcProvider(sonicRPC);
 
 const contractNFT = getContract({
   address: contractAddress,
-  chain: sonicBlaze,
+  chain: sonic,
   client,
 });
 

@@ -17,22 +17,22 @@ const config: any = {
     },
   },
   networks: {
-    sonicBlaze: {
-      url: 'https://rpc.blaze.soniclabs.com',
+    sonic: {
+      url: 'https://rpc.soniclabs.com',
       accounts: [process.env.ACCOUNT_PRIVATE_KEY],
     },
   },
   etherscan: {
     apiKey: {
-      sonicBlaze: process.env.SONICSCAN_TESTNET_API_KEY,
+      sonic: process.env.SONICSCAN_API_KEY,
     },
     customChains: [
       {
-        network: 'sonicBlaze',
-        chainId: 57054,
+        network: 'sonic',
+        chainId: 146,
         urls: {
-          apiURL: 'https://api-testnet.sonicscan.org/api',
-          browserURL: 'https://testnet.sonicscan.org',
+          apiURL: 'https://api.sonicscan.org/api',
+          browserURL: 'https://sonicscan.org',
         },
       },
     ],

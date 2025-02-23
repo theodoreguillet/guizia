@@ -1,7 +1,7 @@
 'use client';
 
 import { client } from '@/app/client';
-import { sonicBlaze } from '@/chains/sonic-blaze';
+import { sonic } from '@/chains/sonic';
 import { ConnectButton } from 'thirdweb/react';
 import { createWallet } from 'thirdweb/wallets';
 
@@ -14,7 +14,7 @@ export function ThirdwebConnectButton() {
         url: 'https://guizia.io',
       }}
       wallets={[createWallet('io.rabby'), createWallet('io.metamask')]}
-      chain={sonicBlaze}
+      chain={sonic}
     />
   );
 }

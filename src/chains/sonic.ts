@@ -15,3 +15,5 @@ export const sonic = /*@__PURE__*/ defineChain({
     },
   ],
 });
+
+export const sonicRPC: string = 'https://rpc.soniclabs.com';

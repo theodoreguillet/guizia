@@ -1,6 +1,6 @@
 'use client';
 
-import { sonicBlaze, sonicBlazeRPC } from '@/chains/sonic-blaze';
+import { sonic, sonicRPC } from '@/chains/sonic';
 import styles from './Credits.module.css';
 import { ethers, parseUnits } from 'ethers';
 import { useEffect, useState } from 'react';
@@ -25,11 +25,11 @@ const contractABI = require('../../../abi/guizia-nft.abi.json');
 
 const contractNFT = getContract({
   address: contractAddress,
-  chain: sonicBlaze,
+  chain: sonic,
   client,
 });
 
-const provider = new ethers.JsonRpcProvider(sonicBlazeRPC);
+const provider = new ethers.JsonRpcProvider(sonicRPC);
 
 export function Credits() {
   const { loading, setLoading } = useLoading();
@@ -85,7 +85,7 @@ export function Credits() {
         const approveTx = prepareContractCall({
           contract: getContract({
             address: tokenAddress,
-            chain: sonicBlaze,
+            chain: sonic,
             client,
           }),
           method: 'function approve(address spender, uint256 amount)',
