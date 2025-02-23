@@ -2,6 +2,7 @@ import time
 from src.action_handler import register_action
 from src.helpers import print_h_bar
 from src.prompts import POST_TWEET_PICTURE_PROMPT, POST_TWEET_PROMPT, REPLY_TWEET_PROMPT
+import json
 
 
 @register_action("post-tweet")
@@ -47,13 +48,13 @@ def post_tweet_picture(agent, **kwargs):
     if current_time - last_tweet_time >= agent.tweet_interval:
         agent.logger.info("\n📝 GENERATING NEW PICTURE TWEET")
         print_h_bar()
+        
+        # Generating the picture
+        picture_data = agent.generate_picture()
 
         # Generating the tweet text from prompt
-        prompt = POST_TWEET_PICTURE_PROMPT.format(agent_name = agent.name)
+        prompt = POST_TWEET_PICTURE_PROMPT.format(agent_name = agent.name, personality = picture_data["personality"], traits = json.dumps(picture_data["traits"], indent=2))
         tweet_text = agent.prompt_llm(prompt)
-
-        # Generating the picture
-        picture_link = agent.generate_picture()
 
         if tweet_text:
             agent.logger.info("\n🚀 Posting picture tweet:")
@@ -61,7 +62,7 @@ def post_tweet_picture(agent, **kwargs):
             agent.connection_manager.perform_action(
                 connection_name="twitter",
                 action_name="post-tweet-picture",
-                params=[tweet_text, picture_link]
+                params=[tweet_text, picture_data["image_url"]]
             )
             agent.state["last_tweet_time"] = current_time
             agent.logger.info("\n✅ Tweet picture posted successfully!")

@@ -4,7 +4,7 @@ import time
 import logging
 import os
 from pathlib import Path
-from urllib import request
+import requests
 from dotenv import load_dotenv
 from src.connection_manager import ConnectionManager
 from src.helpers import print_h_bar
@@ -146,20 +146,24 @@ class ZerePyAgent:
             params=[prompt, system_prompt]
         )
     
-    def generate_picture(self) -> str:
+    def generate_picture(self) -> dict:
         """Generate picture"""
 
-        url = "http://54.36.188.91:7777/gen-image-personality"
+        url = f"{os.getenv('IMAGE_GENERATOR_API_URL')}/gen-image-personality"
         headers = {
-            "Authorization": f"Bearer {os.getenv('IMAGE_GENERATOR_API_KEY')}"
+            "x-api-key": f"{os.getenv('IMAGE_GENERATOR_API_KEY')}"
         }
 
         # Send the POST request to the API
-        response = request.get(url, headers=headers)
+        response = requests.get(url, headers=headers, timeout=300)
 
         # Check if the request was successful
         if response.status_code == 200:
-            return response.json().get("output")
+            return {
+                "image_url": response.json().get("output"),
+                "traits": response.json().get("traits"),
+                "personality": response.json().get("personality").get("primary"),
+            }
         else:
             raise Exception(f"Failed to generate picture: {response.status_code} - {response.text}")
 
